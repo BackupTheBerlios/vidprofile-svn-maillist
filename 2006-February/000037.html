@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r41 - trunk/src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r41%20-%20trunk/src&In-Reply-To=%3C200602011242.k11CgL2u023361%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000038.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r41 - trunk/src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r41%20-%20trunk/src&In-Reply-To=%3C200602011242.k11CgL2u023361%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r41 - trunk/src">friedrij at berlios.de
+       </A><BR>
+    <I>Wed Feb  1 13:42:21 CET 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000038.html">[vidprofile-svn] r42 - in trunk: . src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2006-02-01 13:41:49 +0100 (Wed, 01 Feb 2006)
+New Revision: 41
+
+Modified:
+   trunk/src/lib-vidprofile.sh.in
+Log:
+new lib function: verify
+
+Modified: trunk/src/lib-vidprofile.sh.in
+===================================================================
+--- trunk/src/lib-vidprofile.sh.in	2006-01-21 15:35:21 UTC (rev 40)
++++ trunk/src/lib-vidprofile.sh.in	2006-02-01 12:41:49 UTC (rev 41)
+@@ -105,4 +105,50 @@
+   else
+     mkdir &quot;$VIDPROFILE_HOME&quot;
+   fi
+-}
+\ No newline at end of file
++}
++
++# ******************************************************************************
++# Verify that a variable meets certain conditions
++# Usage: verify $VAR set|range &quot;test limits&quot;
++# Input: $1 = the variable to check
++#        $2 = the kind of test to perform (set|range)
++#             set: test if $VAR is in the space-separated set &quot;test limits&quot;
++#             range: test if $VAR is in the range given by &quot;test limits&quot;
++#        $3 = the limits for the test
++#
++# ex: verify $CMD_LN_OPT set &quot;y n Y N&quot;
++#     will return &quot;:&quot; (true) if $CMD_LN_OPT is one of &quot;y n Y N&quot;
++#     or retern &quot;false&quot; if it isn't (so if $CMD_LN_OPT was &quot;no&quot;, you'd get &quot;false&quot;)
++#
++# ex: verify $CMD_LN_OPT range &quot;0 10&quot;
++#     will return &quot;:&quot; (true) if 0 &lt;= $CMD_LN_OPT &lt;= 10
++# ******************************************************************************
++verify ()
++{
++  VERIFY_VAR=$1
++  VERIFY_TEST_TYPE=$2
++  case $VERIFY_TEST_TYPE in
++     &quot;range&quot; )
++     VERIFY_LOW=`echo &quot;$3&quot; | awk '{ print $1 }'`
++     VERIFY_HIGH=`echo &quot;$3&quot; | awk '{ print $2 }'`
++
++     if test $VERIFY_LOW -le $VERIFY_VAR &amp;&amp; \
++        test $VERIFY_HIGH -ge $VERIFY_VAR
++     then
++        echo &quot;:&quot;
++     else
++        echo &quot;false&quot;
++     fi 
++     ;;
++
++     &quot;set&quot; )
++     VERIFY_SET=&quot;$3&quot;
++
++     if echo &quot;$VERIFY_SET&quot; | grep &quot;$VERIFY_VAR&quot; &gt;&gt; /dev/null 2&gt;&amp;1; then
++         echo &quot;:&quot;
++     else
++         echo &quot;false&quot;
++     fi
++     ;;
++  esac
++}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000038.html">[vidprofile-svn] r42 - in trunk: . src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r23 - trunk/doc
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r23%20-%20trunk/doc&In-Reply-To=%3C200512061201.jB6C1BGi001716%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000019.html">
+   <LINK REL="Next"  HREF="000021.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r23 - trunk/doc</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r23%20-%20trunk/doc&In-Reply-To=%3C200512061201.jB6C1BGi001716%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r23 - trunk/doc">friedrij at berlios.de
+       </A><BR>
+    <I>Tue Dec  6 13:01:11 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000019.html">[vidprofile-svn] r22 - trunk/doc
+</A></li>
+        <LI>Next message: <A HREF="000021.html">[vidprofile-svn] r24 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-06 13:00:42 +0100 (Tue, 06 Dec 2005)
+New Revision: 23
+
+Modified:
+   trunk/doc/pkdocs
+Log:
+added t2t packing to pkdocs
+
+Modified: trunk/doc/pkdocs
+===================================================================
+--- trunk/doc/pkdocs	2005-12-06 11:58:04 UTC (rev 22)
++++ trunk/doc/pkdocs	2005-12-06 12:00:42 UTC (rev 23)
+@@ -2,15 +2,39 @@
+ 
+ # Pack up the html documentation for the vidprofile suite
+ 
+-DOC_TAR=&quot;vidprofile-html-docs.tar&quot;
+-DOC_GZ=&quot;vidprofile-html-docs.tar.gz&quot;
++HTML_TAR=&quot;vidprofile-html-docs.tar&quot;
++HTML_GZ=&quot;vidprofile-html-docs.tar.gz&quot;
++HTML_DIR=&quot;html&quot;
+ 
+-./mkdocs
++T2T_TAR=&quot;vidprofile-t2t-docs.tar&quot;
++T2T_GZ=&quot;vidprofile-t2t-docs.tar.gz&quot;
++T2T_DIR=&quot;src&quot;
+ 
+-cd html
++PKDOCS_PWD=`pwd`
+ 
+-rm -fv $DOC_GZ
+-tar -cvvf $DOC_TAR *.html *.php *.css fig/*
+-gzip -v $DOC_TAR
++$PKDOCS_PWD/mkdocs
+ 
+-rm -fv $DOC_TAR
+\ No newline at end of file
++echo
++echo &quot;Packing html files...&quot;
++echo
++
++cd $PKDOCS_PWD/$HTML_DIR
++
++rm -fv $HTML_GZ
++tar -cvvf $HTML_TAR *.html *.php *.css fig/*
++gzip -v $HTML_TAR
++rm -fv $HTML_TAR
++
++echo
++echo &quot;Packing t2t files...&quot;
++echo
++
++cd $PKDOCS_PWD/$T2T_DIR
++
++rm -fv $T2T_GZ
++tar -cvvf $T2T_TAR *.t2t *.html
++gzip -v $T2T_TAR
++rm -fv $T2T_TAR
++mv -v $T2T_GZ $PKDOCS_PWD/$HTML_DIR
++
++echo
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000019.html">[vidprofile-svn] r22 - trunk/doc
+</A></li>
+	<LI>Next message: <A HREF="000021.html">[vidprofile-svn] r24 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

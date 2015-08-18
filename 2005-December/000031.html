@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r35 - trunk/doc/src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r35%20-%20trunk/doc/src&In-Reply-To=%3C200512101451.jBAEp11Y031453%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000030.html">
+   <LINK REL="Next"  HREF="000032.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r35 - trunk/doc/src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r35%20-%20trunk/doc/src&In-Reply-To=%3C200512101451.jBAEp11Y031453%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r35 - trunk/doc/src">friedrij at berlios.de
+       </A><BR>
+    <I>Sat Dec 10 15:51:01 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000030.html">[vidprofile-svn] r34 - trunk
+</A></li>
+        <LI>Next message: <A HREF="000032.html">[vidprofile-svn] r36 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-10 15:51:01 +0100 (Sat, 10 Dec 2005)
+New Revision: 35
+
+Modified:
+   trunk/doc/src/about.t2t
+   trunk/doc/src/incl-footer.t2t
+   trunk/doc/src/setup.t2t
+   trunk/doc/src/vidprofile.t2t
+Log:
+final publish cosmetic changes. re-ordered svn install instructions, revised appearance
+
+Modified: trunk/doc/src/about.t2t
+===================================================================
+--- trunk/doc/src/about.t2t	2005-12-10 13:13:36 UTC (rev 34)
++++ trunk/doc/src/about.t2t	2005-12-10 14:51:01 UTC (rev 35)
+@@ -18,7 +18,7 @@
+ Shortly after that, the developers thought that other users may want to use this script, and they began to modify profile to make it more command-line friendly. Up until this point, setting parameters for every new profile involved editing the constants in the script and running again, something not acceptable for an application. profile needed to take command line arguments and use configuration files. After those updates were finished, this documentation was written, and the package was officially released.
+ 
+ == Revision History==
+-: **Revision 3:** //2005-12-09//
++: **Revision 2.1:** //2005-12-10//
+   Updated installation instructions for Subversion and revised the usage guide.
+ : **Revision 2:** //2005-11-15//
+   Converted source DocBook file to [txt2tags <A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>].
+
+Modified: trunk/doc/src/incl-footer.t2t
+===================================================================
+--- trunk/doc/src/incl-footer.t2t	2005-12-10 13:13:36 UTC (rev 34)
++++ trunk/doc/src/incl-footer.t2t	2005-12-10 14:51:01 UTC (rev 35)
+@@ -1,4 +1,4 @@
+ 
+-//Last modified on %%mtime(%b %d %Y) at %%mtime(%H:%M) (UTC+9) .//
++//Last modified on %%mtime(%b %d %Y) at %%mtime(%H:%M) (UTC+9).//
+ 
+ %!include: ''incl-poweredby.html''
+
+Modified: trunk/doc/src/setup.t2t
+===================================================================
+--- trunk/doc/src/setup.t2t	2005-12-10 13:13:36 UTC (rev 34)
++++ trunk/doc/src/setup.t2t	2005-12-10 14:51:01 UTC (rev 35)
+@@ -75,12 +75,10 @@
+ 
+ === Configure, Compile, and Install ===
+ 
+-Now that you have the source, configure, compile, and install the package:
++Now that you have the source, configure, compile, and install the package. First, configure it:
+ 
+ ```
+ $ ./configure
+-$ make
+-$ su -c &quot;make install&quot;
+ ```
+ 
+ ./configure will search your system for the dependencies vidprofile has and summarize what it found at the end. Be sure to look carefully that everything is there. An example successful ./configure summary is:
+@@ -104,6 +102,13 @@
+ config.status: creating src/lib-vidprofile.sh
+ ```
+ 
++Then compile and install your properly configured package:
++
++```
++$ make
++$ su -c &quot;make install&quot;
++```
++
+ == Uninstalling ==
+ 
+ If you decide you don't want vidprofile installed anymore, run **``su -c &quot;make uninstall&quot;``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
+
+Modified: trunk/doc/src/vidprofile.t2t
+===================================================================
+--- trunk/doc/src/vidprofile.t2t	2005-12-10 13:13:36 UTC (rev 34)
++++ trunk/doc/src/vidprofile.t2t	2005-12-10 14:51:01 UTC (rev 35)
+@@ -36,7 +36,7 @@
+ == News ==[news]
+ 
+ **Newest on top** (get [rss <A HREF="http://developer.berlios.de/export/rss_project.php?group_id=5477">http://developer.berlios.de/export/rss_project.php?group_id=5477</A>] feeds! new releases, bugs, patches, and more)
+-- 2005-12-09: website uploaded and published! (get the [source about.html#toc2])
++- 2005-12-10: website uploaded and published! (get the [source about.html#toc2])
+ - 2005-12-06: vidprofile-0.80 released! [Get it DOWNLOAD_URL/vidprofile-0.80.tar.gz].
+ - 2005-12-04: project launched on [berliOS <A HREF="http://www.berlios.de">http://www.berlios.de</A>].
+ - 2005-11-15: documentation re-written with [txt2tags <A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>].
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000030.html">[vidprofile-svn] r34 - trunk
+</A></li>
+	<LI>Next message: <A HREF="000032.html">[vidprofile-svn] r36 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

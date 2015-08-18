@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r2 - trunk/doc/src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r2%20-%20trunk/doc/src&In-Reply-To=%3C200512051337.jB5DbRRk023340%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000000.html">
+   <LINK REL="Next"  HREF="000002.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r2 - trunk/doc/src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r2%20-%20trunk/doc/src&In-Reply-To=%3C200512051337.jB5DbRRk023340%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r2 - trunk/doc/src">friedrij at berlios.de
+       </A><BR>
+    <I>Mon Dec  5 14:37:27 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000000.html">[vidprofile-svn] r1 - / trunk trunk/doc trunk/doc/fig trunk/doc/src trunk/src
+</A></li>
+        <LI>Next message: <A HREF="000002.html">[vidprofile-svn] r3 - trunk/doc
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1">[ date ]</a>
+              <a href="thread.html#1">[ thread ]</a>
+              <a href="subject.html#1">[ subject ]</a>
+              <a href="author.html#1">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-05 14:37:21 +0100 (Mon, 05 Dec 2005)
+New Revision: 2
+
+Added:
+   trunk/doc/src/man.t2t
+Modified:
+   trunk/doc/src/incl-nav.t2t
+   trunk/doc/src/setup.t2t
+   trunk/doc/src/vidprofile.t2t
+Log:
+reworked naviation (added man page node), added news links, corrected svn install instructions
+
+Modified: trunk/doc/src/incl-nav.t2t
+===================================================================
+--- trunk/doc/src/incl-nav.t2t	2005-12-05 08:05:11 UTC (rev 1)
++++ trunk/doc/src/incl-nav.t2t	2005-12-05 13:37:21 UTC (rev 2)
+@@ -6,7 +6,5 @@
+ - [How to howto.html]
+ - [Results analysis.html]
+ - [About about.html]
+-- man [profile profile.html]
+-- man [vidpsnr vidpsnr.html]
+-- man [psnrcore psnrcore.html]
++- [man pages man.html]
+ 
+
+Added: trunk/doc/src/man.t2t
+===================================================================
+--- trunk/doc/src/man.t2t	2005-12-05 08:05:11 UTC (rev 1)
++++ trunk/doc/src/man.t2t	2005-12-05 13:37:21 UTC (rev 2)
+@@ -0,0 +1,16 @@
++vidprofile man pages
++
++
++%!includeconf: incl-vidprofilerc.t2t
++%!include(html): incl-header.t2t
++%!include(xhtml): incl-header.t2t
++
++This is the html man page documentation for vidprofile, an open-source suite of tools for evaluating mpeg2enc from mjpegtools (and a daughter project of [tovid <A HREF="http://www.tovid.org">http://www.tovid.org</A>]).
++
++- man [profile profile.html]: Analyze the options of mpeg2enc
++- man [vidpsnr vidpsnr.html]: Find the Peak-Signal-to-Noise Ratio between two videos.
++- man [psnrcore psnrcore.html]: Calculate the Peak-Signal-to-Noise Ratio (PSNR) between the frames of two videos.
++
++
++%!include(html): incl-footer.t2t
++%!include(xhtml): incl-footer.t2t
+
+Modified: trunk/doc/src/setup.t2t
+===================================================================
+--- trunk/doc/src/setup.t2t	2005-12-05 08:05:11 UTC (rev 1)
++++ trunk/doc/src/setup.t2t	2005-12-05 13:37:21 UTC (rev 2)
+@@ -81,17 +81,15 @@
+ 
+ === SVN builds ===[cvs]
+ 
+-You can get a copy of the latest development version of vidprofile through Subversion (svn). To get this version, you need to have [SVN <A HREF="http://subversion.tigris.org/">http://subversion.tigris.org/</A>] installed.
++You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online <A HREF="http://svn.berlios.de/wsvn/vidprofile">http://svn.berlios.de/wsvn/vidprofile</A>]. To get this version, you need to have [SVN <A HREF="http://subversion.tigris.org/">http://subversion.tigris.org/</A>] installed.
+ 
+ Using SVN is a little different; instead of just downloading vidprofile, you'll be &quot;checking out&quot; a copy of it. Using the same example directory as above:
+ 
+ ``` 
+ $ cd ~/Downloads
+-$ cvs -d:pserver:<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">anonymous at cvs.sourceforge.net</A>:/cvsroot/tovid login
+-Logging in to :pserver:<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">anonymous at cvs.sourceforge.net</A>:2401/cvsroot/tovid
+-CVS password:   (Enter)
+-$ cvs -d:pserver:<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">anonymous at cvs.sourceforge.net</A>:/cvsroot/tovid co -P test-tools
+-$ cd test-tools
++$ svn checkout <A HREF="svn://svn.berlios.de/vidprofile/trunk">svn://svn.berlios.de/vidprofile/trunk</A>
++&lt;lots of output&gt;
++$ cd trunk
+ $ ./bootstrap
+ $ ./configure
+ $ make
+
+Modified: trunk/doc/src/vidprofile.t2t
+===================================================================
+--- trunk/doc/src/vidprofile.t2t	2005-12-05 08:05:11 UTC (rev 1)
++++ trunk/doc/src/vidprofile.t2t	2005-12-05 13:37:21 UTC (rev 2)
+@@ -28,11 +28,14 @@
+ == Help ==[help]
+ 
+ - The mailing list: vidprofile-users ([subscribe <A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-users">https://lists.berlios.de/mailman/listinfo/vidprofile-users</A>]) ([archives <A HREF="https://lists.berlios.de/pipermail/vidprofile-users">https://lists.berlios.de/pipermail/vidprofile-users</A>])
++- The forums: [@berliOS <A HREF="http://developer.berlios.de/forum/?group_id=5477">http://developer.berlios.de/forum/?group_id=5477</A>]
++- Report a [bug <A HREF="http://developer.berlios.de/bugs/?group_id=5477">http://developer.berlios.de/bugs/?group_id=5477</A>]
++- Get [patches <A HREF="http://developer.berlios.de/patch/?group_id=5477">http://developer.berlios.de/patch/?group_id=5477</A>]
+ 
+ 
+ == News ==[news]
+ 
+-(Newest on top)
++**Newest on top** (get [rss <A HREF="http://developer.berlios.de/export/rss_project.php?group_id=5477">http://developer.berlios.de/export/rss_project.php?group_id=5477</A>] feeds!)
+ - 2005-12-04: project launched on [berliOS <A HREF="http://www.berlios.de">http://www.berlios.de</A>].
+ - 2005-11-15: documentation re-written with [txt2tags <A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>].
+ - 2005-10-02: vidprofile-0.alpha is birthed.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000000.html">[vidprofile-svn] r1 - / trunk trunk/doc trunk/doc/fig trunk/doc/src trunk/src
+</A></li>
+	<LI>Next message: <A HREF="000002.html">[vidprofile-svn] r3 - trunk/doc
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1">[ date ]</a>
+              <a href="thread.html#1">[ thread ]</a>
+              <a href="subject.html#1">[ subject ]</a>
+              <a href="author.html#1">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

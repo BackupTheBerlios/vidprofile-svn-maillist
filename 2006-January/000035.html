@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r39 - trunk
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r39%20-%20trunk&In-Reply-To=%3C200601211307.k0LD7AN8022351%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000034.html">
+   <LINK REL="Next"  HREF="000036.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r39 - trunk</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r39%20-%20trunk&In-Reply-To=%3C200601211307.k0LD7AN8022351%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r39 - trunk">friedrij at berlios.de
+       </A><BR>
+    <I>Sat Jan 21 14:07:10 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000034.html">[vidprofile-svn] r38 - in trunk: . src
+</A></li>
+        <LI>Next message: <A HREF="000036.html">[vidprofile-svn] r40 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2006-01-21 14:07:05 +0100 (Sat, 21 Jan 2006)
+New Revision: 39
+
+Modified:
+   trunk/configure.ac
+Log:
+autoconfig gives special messages for each dependency for those that are not found
+
+Modified: trunk/configure.ac
+===================================================================
+--- trunk/configure.ac	2006-01-21 10:41:28 UTC (rev 38)
++++ trunk/configure.ac	2006-01-21 13:07:05 UTC (rev 39)
+@@ -61,39 +61,44 @@
+ # ******************************************************************************
+ 
+ AC_MSG_NOTICE([Checking for required dependencies...])
+-AC_CHECK_PROG(GREP, [grep], [ok], [NOT FOUND])
+-AC_CHECK_PROG(MPLAYER, [mplayer], [ok], [NOT FOUND])
+-AC_CHECK_PROG(MPEG2ENC, [mpeg2enc], [ok], [NOT FOUND])
+-AC_CHECK_PROG(BC, [bc], [ok], [NOT FOUND])
++AC_CHECK_PROG(GREP, [grep], [ok], [MISSING])
++AC_CHECK_PROG(MPLAYER, [mplayer], [ok], [MISSING])
++AC_CHECK_PROG(MPEG2ENC, [mpeg2enc], [ok], [MISSING])
++AC_CHECK_PROG(BC, [bc], [ok], [MISSING])
+ 
+ # ------------------------------------------------------------------------------
+ # Complain about missing required dependencies. If some are missing, list all
+ # missing ones before failing and exiting.
+ 
++grep_msg=&quot;a GNU utility (<A HREF="http://www.gnu.org/software/grep">http://www.gnu.org/software/grep</A>)&quot;
++mplayer_msg=&quot;part of mplayer (<A HREF="http://www.mplayerhq.hu">http://www.mplayerhq.hu</A>)&quot;
++mpeg2enc_msg=&quot;part of mjpegtools (<A HREF="http://mjpeg.sf.net">http://mjpeg.sf.net</A>}&quot;
++bc_msg=&quot;a GNU utility (<A HREF="http://directory.fsf.org/GNU/bc.html">http://directory.fsf.org/GNU/bc.html</A>)&quot;
++
+ # Sneaky make-do array. 
+-REQ_DEP_LIST=&quot;grep=$GREP:mplayer=$MPLAYER:mpeg2enc=$MPEG2ENC:bc=$BC&quot;
++REQ_DEP_LIST=&quot;grep=$GREP mplayer=$MPLAYER mpeg2enc=$MPEG2ENC bc=$BC&quot;
+ 
+ # We can use gawk with confidence because the above
+ # initiation macros look for it and will exit if gawk isn't found.
+ FAIL=false
+-i=1
+-while test $i -le `echo &quot;$REQ_DEP_LIST&quot; | gawk -F ':' '{ print NF }'`; do
+-   DEP=`echo $REQ_DEP_LIST | gawk -F ':' &quot;{ print $&quot;$i&quot; }&quot;`
++for DEP in $REQ_DEP_LIST; do
+    NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
+    FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
+-   if test &quot;x$FOUND&quot; != &quot;xok&quot;; then
+-     AC_MSG_WARN([Cannot find REQUIRED dependency: $NAME])
++   if test &quot;x$FOUND&quot; = &quot;xMISSING&quot;; then
+      FAIL=:
++     ERR_MSG=$`eval echo ${NAME}_msg`
++     ERR_MSG=`eval echo $ERR_MSG`
++     MISSING_DEPS=`echo &quot;$MISSING_DEPS&quot;; printf &quot;    %-9s %s\n&quot; &quot;$NAME&quot; &quot;$ERR_MSG&quot;`
+    fi
+-   i=`expr $i + 1`
+ done
+ 
+ if $FAIL; then
+  AC_MSG_ERROR([
+ 
+- Could not find the above REQUIRED dependencies.
+- Please install the missing dependencies and ./configure again.
+- See vidprofile.berlios.de for links.
++  Could not find these REQUIRED dependencies:
++$MISSING_DEPS
++ 
++  Please install the missing dependencies and ./configure again.
+ ])
+ fi
+ 
+@@ -111,7 +116,7 @@
+ 
+ # ------------------------------------------------------------------------------
+ # Check for Peak Signal to Noise Ratio dependencies
+-AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [NOT FOUND])
++AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [MISSING])
+ 
+ if test &quot;x$PNMPSNR&quot; = &quot;xok&quot;; then
+    HAVE_PSNR=&quot;pnmpsnr&quot;
+@@ -126,22 +131,23 @@
+ # Sneaky make-do array. 
+ OPT_DEP_LIST=&quot;pnmpsnr=$PNMPSNR&quot;
+ 
+-i=1
+-while test $i -le `echo &quot;$OPT_DEP_LIST&quot; | gawk -F ':' '{ print NF }'`; do
+-   DEP=`echo $OPT_DEP_LIST | gawk -F ':' &quot;{ print $&quot;$i&quot; }&quot;`
++for DEP in $OPT_DEP_LIST; do
+    NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
+    FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
+    if test &quot;x$FOUND&quot; = &quot;xok&quot;; then
+      unset ${NAME}_msg
+    fi
+-   i=`expr $i + 1`
+ done
+ 
+ if test &quot;x$HAVE_PSNR&quot; = &quot;xpnmpsnr&quot;
+ then
+    OPT_DEPENDENCIES=&quot;ALL FOUND&quot;
++   OPT_DEP_MSG=&quot;SUCCESS!!&quot;
++   INSTALL_MSG=&quot;Type 'su -c \&quot;make install\&quot;' to compile and install vidprofile.&quot;
+ else
+    OPT_DEPENDENCIES=&quot;SOME MISSING&quot;
++   OPT_DEP_MSG=&quot;PARTIAL PASS (the MISSING dependencies above are not supported)&quot;
++   INSTALL_MSG=&quot;Type 'su -c \&quot;make install\&quot;' to compile and install vidprofile anyway.&quot;
+ fi
+ 
+ # ******************************************************************************
+@@ -181,5 +187,8 @@
+   Required dependencies: ALL FOUND
+ 
+   Optional dependencies: $OPT_DEPENDENCIES
+-    pnmpsnr:       $PNMPSNR  $pnmpsnr_msg
++    pnmpsnr:       $PNMPSNR $pnmpsnr_msg
++
++$OPT_DEP_MSG
++  $INSTALL_MSG
+ ])
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000034.html">[vidprofile-svn] r38 - in trunk: . src
+</A></li>
+	<LI>Next message: <A HREF="000036.html">[vidprofile-svn] r40 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

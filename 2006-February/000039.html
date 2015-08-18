@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r44 - trunk/doc
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r44%20-%20trunk/doc&In-Reply-To=%3C200602160915.k1G9F2p2004979%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000042.html">
+   <LINK REL="Next"  HREF="000040.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r44 - trunk/doc</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r44%20-%20trunk/doc&In-Reply-To=%3C200602160915.k1G9F2p2004979%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r44 - trunk/doc">friedrij at berlios.de
+       </A><BR>
+    <I>Thu Feb 16 10:15:02 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000042.html">[vidprofile-svn] r43 - in trunk: . doc src
+</A></li>
+        <LI>Next message: <A HREF="000040.html">[vidprofile-svn] r45 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2006-02-16 10:15:01 +0100 (Thu, 16 Feb 2006)
+New Revision: 44
+
+Modified:
+   trunk/doc/mkdocs
+   trunk/doc/pkdocs
+Log:
+better error handling
+
+Modified: trunk/doc/mkdocs
+===================================================================
+--- trunk/doc/mkdocs	2006-02-16 09:06:47 UTC (rev 43)
++++ trunk/doc/mkdocs	2006-02-16 09:15:01 UTC (rev 44)
+@@ -44,4 +44,4 @@
+ echo &quot;$ME Docs made!&quot;
+ echo
+ 
+-exit 0
+\ No newline at end of file
++exit 0
+
+Modified: trunk/doc/pkdocs
+===================================================================
+--- trunk/doc/pkdocs	2006-02-16 09:06:47 UTC (rev 43)
++++ trunk/doc/pkdocs	2006-02-16 09:15:01 UTC (rev 44)
+@@ -17,28 +17,40 @@
+ 
+ echo &quot;$ME Executing mkdocs...&quot;
+ echo
+-$PKDOCS_PWD/mkdocs
++if $PKDOCS_PWD/mkdocs; then :
++else
++   echo &quot;$ME Couldn't make the docs!&quot;
++   echo &quot;$ME Exiting...&quot;
++   exit 1
+ 
+ echo &quot;$ME Packing html files...&quot;
+-
+ cd $PKDOCS_PWD/$HTML_DIR
+-
+ rm -f $HTML_GZ
+-tar -cf $HTML_TAR *.html *.php *.css fig/*
+-gzip $HTML_TAR
+-rm -f $HTML_TAR
++if tar -cf $HTML_TAR *.html *.php *.css fig/* &amp;&amp; \
++   gzip $HTML_TAR &amp;&amp; \
++   rm -f $HTML_TAR
++then :
++else
++   echo &quot;$ME Couldn't zip the html files!&quot;
++   echo &quot;$ME Exiting...&quot;
++   exit 1
++fi
+ 
+ echo &quot;$ME Packing t2t files...&quot;
+-
+ cd $PKDOCS_PWD/$T2T_DIR
+-
+ rm -f $T2T_GZ
+-tar -cf $T2T_TAR *.t2t *.html
+-gzip $T2T_TAR
+-rm -f $T2T_TAR
+-mv $T2T_GZ $PKDOCS_PWD/$HTML_DIR
++if tar -cf $T2T_TAR *.t2t *.html &amp;&amp; \
++   gzip $T2T_TAR &amp;&amp; \
++   rm -f $T2T_TAR &amp;&amp; \
++   mv $T2T_GZ $PKDOCS_PWD/$HTML_DIR
++then :
++else
++   echo &quot;$ME Couldn't zip the t2t files!&quot;
++   echo &quot;$ME Exiting...&quot;
++   exit 1
++fi  
+ 
+ echo &quot;$ME Docs packed!&quot;
+ echo
+ 
+-exit 0
+\ No newline at end of file
++exit 0
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000042.html">[vidprofile-svn] r43 - in trunk: . doc src
+</A></li>
+	<LI>Next message: <A HREF="000040.html">[vidprofile-svn] r45 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

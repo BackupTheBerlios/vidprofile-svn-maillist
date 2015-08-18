@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r37 - in trunk: . src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r37%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200601210854.k0L8sv5b015137%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000034.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r37 - in trunk: . src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r37%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200601210854.k0L8sv5b015137%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r37 - in trunk: . src">friedrij at berlios.de
+       </A><BR>
+    <I>Sat Jan 21 09:54:57 CET 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000034.html">[vidprofile-svn] r38 - in trunk: . src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2006-01-21 09:54:56 +0100 (Sat, 21 Jan 2006)
+New Revision: 37
+
+Modified:
+   trunk/bootstrap
+   trunk/configure.ac
+   trunk/src/Makefile.am
+Log:
+smarter automaking - Static Pattern Rules for making an arbitrary number of shell scripts
+
+Modified: trunk/bootstrap
+===================================================================
+--- trunk/bootstrap	2005-12-14 02:35:26 UTC (rev 36)
++++ trunk/bootstrap	2006-01-21 08:54:56 UTC (rev 37)
+@@ -24,8 +24,8 @@
+ # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ rm -rvf &quot;autom4te.cache&quot;
+-rm -rvf aclocal.m4 configure Makefile.in \
+-        confdefs.h config.log config.status
++rm -rvf aclocal.m4 config.log config.status configure \
++        Makefile Makefile.in
+ rm -rvf src/Makefile src/Makefile.in
+ rm -rvf doc/Makefile doc/Makefile.in
+ 
+
+Modified: trunk/configure.ac
+===================================================================
+--- trunk/configure.ac	2005-12-14 02:35:26 UTC (rev 36)
++++ trunk/configure.ac	2006-01-21 08:54:56 UTC (rev 37)
+@@ -88,6 +88,9 @@
+ ])
+ fi
+ 
++AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
++AC_OUTPUT
++
+ # ******************************************************************************
+ # ******************************************************************************
+ #
+@@ -108,7 +111,4 @@
+ 
+   Optional dependencies
+     pnmpsnr:            $HAVE_PNMPSNR
+-])
+-
+-AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
+-AC_OUTPUT
+\ No newline at end of file
++])
+\ No newline at end of file
+
+Modified: trunk/src/Makefile.am
+===================================================================
+--- trunk/src/Makefile.am	2005-12-14 02:35:26 UTC (rev 36)
++++ trunk/src/Makefile.am	2006-01-21 08:54:56 UTC (rev 37)
+@@ -17,40 +17,42 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+-bin_SCRIPTS = \
+-    lib-vidprofile \
+-    profile \
+-    psnrcore \
+-    vidpsnr
++# List the source files for each shell script to be built and 
++# installed. Correct names are automatically created for the 
++# build process, as well as install directives.
+ 
+-CLEANFILES = $(bin_SCRIPTS)
+-
+-EXTRA_DIST = \
+-    lib-vidprofile.sh.in \
++sh_source = \
++    lib-vidprofile.sh \
+     profile.sh \
+     psnrcore.sh \
+     vidpsnr.sh
+ 
+-lib-vidprofile: $(srcdir)/lib-vidprofile.sh
+-	rm -f &quot;lib-vidprofile&quot;
+-	echo &quot;#! `which env` sh&quot;  &gt; lib-vidprofile
+-	cat $(srcdir)/lib-vidprofile.sh &gt;&gt; lib-vidprofile
+-	chmod ugo+x lib-vidprofile
++################### LEAVE BELOW ALONE #########################
+ 
+-profile: $(srcdir)/profile.sh
+-	rm -f &quot;profile&quot;
+-	echo &quot;#! `which env` sh&quot;  &gt; profile
+-	cat $(srcdir)/profile.sh &gt;&gt; profile
+-	chmod ugo+x profile
++# No need to modify anything below! The above list can 
++# handle an arbitrary amount of shell scripts.
++# Everything is correctly built, installed, and cleaned so long
++# as the source files have a .sh suffix for shell scripts.
+ 
+-psnrcore: $(srcdir)/psnrcore.sh
+-	rm -f &quot;psnrcore&quot;
+-	echo &quot;#! `which env` sh&quot;  &gt; psnrcore
+-	cat $(srcdir)/psnrcore.sh &gt;&gt; psnrcore
+-	chmod ugo+x psnrcore
++# Strip the source file extentions. A built file will be called
++# by the basename of its source.
++#   eg: profile.sh becomes made and installed as profile
++sh_bin = $(basename $(sh_source))
+ 
+-vidpsnr: $(srcdir)/vidpsnr.sh
+-	rm -f &quot;vidpsnr&quot;
+-	echo &quot;#! `which env` sh&quot;  &gt; vidpsnr
+-	cat $(srcdir)/vidpsnr.sh &gt;&gt; vidpsnr
+-	chmod ugo+x vidpsnr
+\ No newline at end of file
++# Specify the scripts to make and install.
++bin_SCRIPTS = $(sh_bin)
++
++# Clean the built scripts only. Leave the source files alone.
++CLEANFILES = $(bin_SCRIPTS)
++
++# Distribute the source files so the suite can be built!
++EXTRA_DIST = $(sh_source)
++
++# Make all the shell scripts.
++# These are Static Pattern Rules, found at:
++# <A HREF="http://www.gnu.org/software/make/manual/html_mono/make.html#SEC47">http://www.gnu.org/software/make/manual/html_mono/make.html#SEC47</A>
++$(sh_bin): %: %.sh
++	rm -f &quot;$@&quot;
++	echo &quot;#! `which env` sh&quot;  &gt; $@
++	cat $(srcdir)/$&lt; &gt;&gt; $@
++	chmod ugo+x $@
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000034.html">[vidprofile-svn] r38 - in trunk: . src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

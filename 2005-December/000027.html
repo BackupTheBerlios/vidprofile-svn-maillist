@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r30 - trunk/doc
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r30%20-%20trunk/doc&In-Reply-To=%3C200512061509.jB6F9FAu028076%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000026.html">
+   <LINK REL="Next"  HREF="000028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r30 - trunk/doc</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r30%20-%20trunk/doc&In-Reply-To=%3C200512061509.jB6F9FAu028076%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r30 - trunk/doc">friedrij at berlios.de
+       </A><BR>
+    <I>Tue Dec  6 16:09:15 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000026.html">[vidprofile-svn] r29 - trunk/doc
+</A></li>
+        <LI>Next message: <A HREF="000028.html">[vidprofile-svn] r31 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-06 16:09:05 +0100 (Tue, 06 Dec 2005)
+New Revision: 30
+
+Modified:
+   trunk/doc/mkdocs
+   trunk/doc/pkdocs
+Log:
+streamlining mkdocs and pkdocs
+
+Modified: trunk/doc/mkdocs
+===================================================================
+--- trunk/doc/mkdocs	2005-12-06 13:25:41 UTC (rev 29)
++++ trunk/doc/mkdocs	2005-12-06 15:09:05 UTC (rev 30)
+@@ -4,6 +4,8 @@
+ # input files. See <A HREF="http://txt2tags.sourceforge.net/">http://txt2tags.sourceforge.net/</A> for
+ # documentation on the input format.
+ 
++ME=&quot;[mkdocs ]:&quot;
++
+ SOURCE=&quot;./src&quot;
+ HTML_DEST=&quot;./html&quot;
+ MAN_DEST=&quot;.&quot;
+@@ -12,14 +14,16 @@
+ TOHTML_OPTS=&quot;-t xhtml&quot;
+ TOHTML_FILES=`find $SOURCE -name &quot;*.t2t&quot; -and -not -name &quot;incl-*.t2t&quot; | sort`
+ 
+-rm -vf $HTML_DEST/*.html
+-rm -vf $MAN_DEST/*.man
++rm -f $HTML_DEST/*.html
++rm -f $MAN_DEST/*.man
+ 
++echo &quot;$ME Making html files...&quot;
++
+ for FILE in $TOHTML_FILES
+ do
+     INFILE=&quot;--infile=$FILE&quot;
+     OUTFILE=&quot;--outfile=$HTML_DEST/`basename $FILE .t2t`.html&quot;
+-    txt2tags $TOHTML_OPTS $INFILE $OUTFILE
++    txt2tags $TOHTML_OPTS $INFILE $OUTFILE &gt;&gt; /dev/null
+ done
+ 
+ # Generate manpages
+@@ -28,11 +32,16 @@
+              src/vidpsnr.t2t \
+              src/psnrcore.t2t&quot;
+ 
++echo &quot;$ME Making man pages...&quot;
++
+ for FILE in $TOMAN_FILES
+ do
+     INFILE=&quot;--infile=$FILE&quot;
+     OUTFILE=&quot;--outfile=$MAN_DEST/`basename $FILE .t2t`.man&quot;
+-    txt2tags $TOMAN_OPTS $INFILE $OUTFILE
++    txt2tags $TOMAN_OPTS $INFILE $OUTFILE &gt;&gt; /dev/null
+ done
+ 
++echo &quot;$ME Docs made!&quot;
++echo
++
+ exit 0
+\ No newline at end of file
+
+Modified: trunk/doc/pkdocs
+===================================================================
+--- trunk/doc/pkdocs	2005-12-06 13:25:41 UTC (rev 29)
++++ trunk/doc/pkdocs	2005-12-06 15:09:05 UTC (rev 30)
+@@ -3,6 +3,8 @@
+ # pkdocs
+ # Pack up the html documentation for the vidprofile suite
+ 
++ME=&quot;[pkdocs ]:&quot;
++
+ HTML_TAR=&quot;vidprofile-html-docs.tar&quot;
+ HTML_GZ=&quot;vidprofile-html-docs.tar.gz&quot;
+ HTML_DIR=&quot;html&quot;
+@@ -13,31 +15,30 @@
+ 
+ PKDOCS_PWD=`pwd`
+ 
++echo &quot;$ME Executing mkdocs...&quot;
++echo
+ $PKDOCS_PWD/mkdocs
+ 
+-echo
+-echo &quot;Packing html files...&quot;
+-echo
++echo &quot;$ME Packing html files...&quot;
+ 
+ cd $PKDOCS_PWD/$HTML_DIR
+ 
+-rm -fv $HTML_GZ
+-tar -cvvf $HTML_TAR *.html *.php *.css fig/*
+-gzip -v $HTML_TAR
+-rm -fv $HTML_TAR
++rm -f $HTML_GZ
++tar -cf $HTML_TAR *.html *.php *.css fig/*
++gzip $HTML_TAR
++rm -f $HTML_TAR
+ 
+-echo
+-echo &quot;Packing t2t files...&quot;
+-echo
++echo &quot;$ME Packing t2t files...&quot;
+ 
+ cd $PKDOCS_PWD/$T2T_DIR
+ 
+-rm -fv $T2T_GZ
+-tar -cvvf $T2T_TAR *.t2t *.html
+-gzip -v $T2T_TAR
+-rm -fv $T2T_TAR
+-mv -v $T2T_GZ $PKDOCS_PWD/$HTML_DIR
++rm -f $T2T_GZ
++tar -cf $T2T_TAR *.t2t *.html
++gzip $T2T_TAR
++rm -f $T2T_TAR
++mv $T2T_GZ $PKDOCS_PWD/$HTML_DIR
+ 
++echo &quot;$ME Docs packed!&quot;
+ echo
+ 
+ exit 0
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000026.html">[vidprofile-svn] r29 - trunk/doc
+</A></li>
+	<LI>Next message: <A HREF="000028.html">[vidprofile-svn] r31 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

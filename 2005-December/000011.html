@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r14 - in trunk: . src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r14%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200512060947.jB69lnbb011709%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000010.html">
+   <LINK REL="Next"  HREF="000012.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r14 - in trunk: . src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r14%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200512060947.jB69lnbb011709%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r14 - in trunk: . src">friedrij at berlios.de
+       </A><BR>
+    <I>Tue Dec  6 10:47:49 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000010.html">[vidprofile-svn] r13 - in trunk: . doc/src
+</A></li>
+        <LI>Next message: <A HREF="000012.html">[vidprofile-svn] r15 - in trunk: . doc src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-06 10:47:44 +0100 (Tue, 06 Dec 2005)
+New Revision: 14
+
+Modified:
+   trunk/ChangeLog
+   trunk/bootstrap
+   trunk/src/lib-vidprofile.sh.in
+   trunk/src/profile.sh
+   trunk/src/psnrcore.sh
+   trunk/src/vidpsnr.sh
+Log:
+changed address to verlios.de
+
+Modified: trunk/ChangeLog
+===================================================================
+--- trunk/ChangeLog	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/ChangeLog	2005-12-06 09:47:44 UTC (rev 14)
+@@ -1,4 +1,4 @@
+-2005-11-29 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++2005-11-29 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+  * Makefile.am:
+      Proper building of the scripts.
+ 
+@@ -22,7 +22,7 @@
+  * man pages:
+      Written and added; created with txt2tags (sf.net).
+ 
+-2005-10-25 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++2005-10-25 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+  * lib-vidprofile:
+      Common functions and constants taken from the suite to create
+           a new library.
+@@ -47,7 +47,7 @@
+  * vidpsnr:
+      Added -help option and formatted usage guide.
+ 
+-2005-10-02 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++2005-10-02 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+  * profile:
+      Added command line interpretation for every option. Basic input
+           checks are also carried out.
+@@ -60,7 +60,7 @@
+           line options following the config file will override the
+           options given in the file.
+ 
+-2005-09-23  Joe Friedrichsen  &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++2005-09-23  Joe Friedrichsen  &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ 
+  * profile: 
+      Added Peak Signal to Noise Ratio calculation.
+
+Modified: trunk/bootstrap
+===================================================================
+--- trunk/bootstrap	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/bootstrap	2005-12-06 09:47:44 UTC (rev 14)
+@@ -1,12 +1,12 @@
+ #! /bin/sh
+ 
+-# Call this script after editing configure.in or Makefile.am
++# Call this script after editing configure.ac or Makefile.am
+ # then:
+ # $ ./configure
+ # $ make
+ # $ make install
+ 
+-# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ # 
+ # This program is free software; you can redistribute it and/or 
+ # modify it under the terms of the GNU General Public License 
+
+Modified: trunk/src/lib-vidprofile.sh.in
+===================================================================
+--- trunk/src/lib-vidprofile.sh.in	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/src/lib-vidprofile.sh.in	2005-12-06 09:47:44 UTC (rev 14)
+@@ -12,7 +12,7 @@
+ # Please see the discussion on the tovid forums for further details:
+ # <A HREF="http://www.createphpbb.com/phpbb/viewtopic.php?p=462&amp;mforum=tovid#462">http://www.createphpbb.com/phpbb/viewtopic.php?p=462&amp;mforum=tovid#462</A>
+ 
+-# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ # Original script pieces by Eric Pierce.
+ # Modified on 2005 September 23.
+ # 
+
+Modified: trunk/src/profile.sh
+===================================================================
+--- trunk/src/profile.sh	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/src/profile.sh	2005-12-06 09:47:44 UTC (rev 14)
+@@ -22,7 +22,7 @@
+ # TO-DO:
+ # (1) Adapt for long movies: allow inpoints and outpoints
+ 
+-# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ # Original script pieces by Eric Pierce.
+ # Modified on 2005 September 23.
+ # 
+
+Modified: trunk/src/psnrcore.sh
+===================================================================
+--- trunk/src/psnrcore.sh	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/src/psnrcore.sh	2005-12-06 09:47:44 UTC (rev 14)
+@@ -30,7 +30,7 @@
+ #    (2) a log file of the PSNR for every frame (as given by the input
+ #        pointer).
+ 
+-# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ # Original shell script by Matthias Wieser, available in MPlayer CVS.
+ # Modified on 2005 September 23.
+ # 
+
+Modified: trunk/src/vidpsnr.sh
+===================================================================
+--- trunk/src/vidpsnr.sh	2005-12-06 09:19:54 UTC (rev 13)
++++ trunk/src/vidpsnr.sh	2005-12-06 09:47:44 UTC (rev 14)
+@@ -31,7 +31,7 @@
+ #         (2) a log file of the PSNR for every frame (as given by the input
+ #             pointer).
+ 
+-# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">pengi.films at gmail.com</A>&gt;
++# Copyright (C) 2005 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+ # Original shell script by Matthias Wieser, available in MPlayer CVS.
+ # Modified on 2005 September 23.
+ # 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000010.html">[vidprofile-svn] r13 - in trunk: . doc/src
+</A></li>
+	<LI>Next message: <A HREF="000012.html">[vidprofile-svn] r15 - in trunk: . doc src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

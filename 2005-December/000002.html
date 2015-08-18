@@ -1,0 +1,637 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r3 - trunk/doc
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r3%20-%20trunk/doc&In-Reply-To=%3C200512051342.jB5DgBL6025459%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000001.html">
+   <LINK REL="Next"  HREF="000003.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r3 - trunk/doc</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r3%20-%20trunk/doc&In-Reply-To=%3C200512051342.jB5DgBL6025459%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r3 - trunk/doc">friedrij at berlios.de
+       </A><BR>
+    <I>Mon Dec  5 14:42:11 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000001.html">[vidprofile-svn] r2 - trunk/doc/src
+</A></li>
+        <LI>Next message: <A HREF="000003.html">[vidprofile-svn] r6 - trunk/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-05 14:42:06 +0100 (Mon, 05 Dec 2005)
+New Revision: 3
+
+Added:
+   trunk/doc/profile.man
+   trunk/doc/psnrcore.man
+   trunk/doc/vidpsnr.man
+Log:
+added man pages for autotools
+
+Added: trunk/doc/profile.man
+===================================================================
+--- trunk/doc/profile.man	2005-12-05 13:37:21 UTC (rev 2)
++++ trunk/doc/profile.man	2005-12-05 13:42:06 UTC (rev 3)
+@@ -0,0 +1,365 @@
++.TH &quot;profile &quot; 1 &quot;&quot; &quot;&quot;
++
++
++.SS NAME
++.P
++profile \-\- Analyze the options of mpeg2enc
++
++.SS SYNOPSIS
++.P
++\fBprofile\fR [ \fIOPTIONS\fR ] \fB\-f\fR \fI/path/to/video.avi\fR
++
++.SS DESCRIPTION
++.P
++profile evaluates the encoding options of mpeg2enc (from mjpegtools). profile takes a video and systematically encodes it with mpeg2enc to measure various effects of mpeg2enc's options on output video bitrate, encoding time, and quality, leaving the data in a comma separated values (.csv) file.
++
++.P
++Additional command line options tell profile to take a snap shot from each test trial and to find the Peak\-Signal\-to\-Noise ratio (PSNR) between the original video file and each test trial. Further options tweak the properties of profile's behavior.
++
++.SS FEATURES
++.RS
++.IP \(bu 3
++Tests any and every mpeg2enc option, recording the output bitrate and encoding time (both in absolute units and normalized to an optionless 'control' trial).
++.IP \(bu 3
++Captures an encoded frame from each trial.
++.IP \(bu 3
++Finds the Peak\-Signal\-to\-Noise (PSNR) ratio between the source video and each encoded trial.
++.RE
++
++.SS OPTIONS
++.SS Required Options
++.TP
++\fB\-f\fR, \fB\-file\fR \fI/path/to/video.avi\fR
++Evaluate mpeg2enc using video.avi. Specify a full or relative path to the source video file. profile will use this video to test the mpeg2enc options you specify (see \fB\-t\fR).
++
++.SS Logs
++.TP
++\fB\-l\fR, \fB\-logfile\fR \fI/path/to/logfile.csv\fR
++Specify a different path for the data file other than the default: $HOME/.vidprofile/profile.csv. The data file is saved as a plain ASCII comma\-separated values file (.csv) for further analysis and plotting.
++
++Recorded data: the tested mpeg2enc command line option(s), duration of source video (s), time to encode (s), output size (kB), time scale factor, output bitrate (kbps), normalized time (%), normalized bitrate (%), and the averaged Peak\-Signal\-to\-Noise Ratio (dB).
++
++.TP
++\fB\-el\fR, \fB\-errlog\fR \fI/path/to/error.log\fR
++Specify a different path for the error log other than the default: /dev/null. All subprocess errors are written here EXCEPT for mplayer's and mpeg2enc's errors, which are written to \fB\-enclog\fR.
++
++.TP
++\fB\-nl\fR, \fB\-enclog\fR \fI/path/to/encoder.log\fR
++Specify a different path for the encoding log other than the default: /dev/null. This log is incredibly verbose: all of mplayer's and mpeg2enc's frame\-by\-frame statistics (and errors, if any) are written here.
++
++.TP
++\fB\-pl\fR, \fB\-psnrlog\fR \fI/path/to/psnr.csv\fR
++Specify a different path for the frame\-by\-frame Peak\-Signal\-to\-Noise Ratio data other than the default: $HOME/.vidprofile/psnr.csv. The data file is saved as a plain ASCII comma\-separated values file (.csv) for further analysis and plotting.
++
++Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB),  whole frame PSNR (dB), frame PSNR error, cumulative error sum.
++
++In cases where the images do not differ, the PSNR cannot be found (because the denominator is zero). Since the images are exactly the same, there is no 'noise', and the PSNR is infinite instead.
++
++NOTE: nothing will be written to the log unless the PSNR is calculated (see \fB\-p\fR).
++
++.SS Option Tests
++.P
++The main purpose of profile is to test mpeg2enc's many options on a video to evaluate the encoder's behavior.
++
++.P
++mpeg2enc has many different options which separate into three classes. Some are flags (either on or off), others independently take one numerical argument in a valid range, and finally some are inter\-dependent, where using one implies using another. The classic example of inter\-dependent options in mpeg2enc is \-b and \-q. Using \-q (quantization) implies a variable bitrate, and thus to keep the bitrate under control, \-b can be used to limit the maximum bitrate.
++
++.P
++profile can test EVERY option of mpeg2enc; the following (summarized) mpeg2enc options are the more interesting ones. See the mpeg2enc man page for complete details of these (and the other) options.
++
++.P
++There are two generalized test specifications:
++
++.TP
++\fB\-t\fR, \fB\-test\fR \fB&quot;\fR\fITEST\fR\fB&quot;\fR
++Multiple tests (\-t) may be called for any profile (see the EXAMPLES).
++
++.TP
++\fB\-t\fR, \fB\-test\fR \fB&quot;\fR\fITEST 1\fR\fB:\fR\fITEST 2\fR\fB:\fR\fITEST 3\fR\fB&quot;\fR
++Instead of specifying each test with a separate \-t option, you may specify many tests at once using a colon (\fB:\fR) as a separator.
++
++.P
++Tests are carried out in the order specified (so no reshuffling). In addition, if tests are specified in the default (or in a \fB\-c\fR given) configuration file, the tests given on command line DO NOT override the configuration file tests. Instead, the command line tests are appended to the end of the test list and carried out last. You may have overlapping tests if you're not careful! This is not a Bad Thing, but you'll run the same test more than once and waste some time.
++
++.P
++Each encoder option class has its own syntax as described below:
++
++.SS Suggested flags
++.TP
++\fB&quot;\-\fR\fIFLAG\fR\fB&quot;\fR
++A \fIFLAG\fR in mpeg2enc takes no numerical arguments: it simply turns on a feature, like a switch. Consequently, only the flag must be given.
++
++.P
++A \fIFLAG\fR is called using the same letter as those for mpeg2enc:
++
++.TP
++\fBc\fR
++Generate closed GOPs.
++
++.TP
++\fBH\fR
++Keep the high\-frequency information.
++
++.TP
++\fBp\fR
++Tell the _decoder_ to use 3\-2 pulldown.
++
++.TP
++\fBs\fR
++Generate sequence headers for ff/rew/seek.
++
++.SS Suggested independent numerical options
++.TP
++\fB&quot;\-\fR\fIOPTION MIN MAX STEP\fR\fB&quot;\fR
++An independent numerical option needs four pieces of information to completely specify an option test: the option to test (\fIOPTION\fR), the value at which to start testing (\fIMIN\fR), the value at which to finish testing (\fIMAX\fR), and the numerical increment between tests (\fISTEP\fR). 
++
++NOTE: if an option can take a decimal argument, both \fIMAX\fR and \fISTEP\fR must have the \fBsame\fR number of decimal places.
++
++.P
++Each \fIOPTION\fR is called using the same letter as those for mpeg2enc:
++
++.TP
++\fBD\fR  9..10
++DC component precision.
++
++.TP
++\fBE\fR  \-40..40
++The 'unit coefficient elimination' threshold.
++
++.TP
++\fBN\fR  0.0..2.0
++Reduce high\-frequency content. 0.0 means don't reduce.
++
++.TP
++\fBr\fR  8|16|24|32
++Motion search radius.
++
++.TP
++\fBR\fR  0..2
++Number of B\-frames between I\- or P\-frames.
++
++.SS Suggested inter-dependent numerical options
++.TP
++\fB&quot;\-\fR\fIOPTION1 MIN1 MAX1 STEP1\fR \fB\-\fR\fIOPTION2 MIN2 MAX2 STEP2\fR\fB&quot;\fR
++Inter\-dependent numerical options are similar to independent numerical options, but using one inter\-dependent option implies the use of another option (or creates the need to use another option). Specifying inter\-dependent options is just giving two options with ranges. 
++
++Eight pieces of information are needed: the first option to test (\fIOPTION1\fR), that option's value at which to start testing (\fIMIN1\fR), that option's value at which to finish testing (\fIMAX1\fR), and that option's numerical increment between tests (\fISTEP1\fR). 
++
++Next, the second option to test (\fIOPTION2\fR), that option's value at which to start testing (\fIMIN2\fR), that option's value at which to finish testing (\fIMAX2\fR), and that option's numerical increment between tests (\fISTEP2\fR). 
++
++NOTE: if an option can take a decimal argument, both \fIMAX\fR and \fISTEP\fR must have the \fBsame\fR number of decimal points.
++
++.P
++profile makes no strictly defined distinction between an independent option and an inter\-dependent option. In fact, profile uses the length of the test string to determine which test to run. Consequently, there's no reason you cannot specify 'independent' options as 'inter\-dependent' options. For example, \fB\-t &quot;\-E \-40 40 5 \-Q 0.0 5.0 1.0&quot;\fR, which will evaluate the inter\-dependence of \-E and \-Q, is a perfectly valid test specification.
++
++.P
++Each OPTION is called using the same number/letter as those for mpeg2enc:
++
++.TP
++\fB2\fR  1..4
++.TP
++\fB4\fR  1..4
++Motion estimation aggressiveness. \-4 controls 4*4 pixel areas, and \-2 controls 2*2 pixel areas.
++
++.TP
++\fBb\fR  100..15000
++The video bitrate. When \-q is present, variable bitrate encoding is enabled, and \-b becomes the maximum bitrate.
++.TP
++\fBq\fR  1..31
++Amount of quantization. A lower number implies less quantization and thus higher quality.
++
++.TP
++\fBg\fR  1..24
++.TP
++\fBG\fR  1..24
++Limits for the size of GOPs (Group of Pictures). \-g is the lower limit; \-G is the upper limit.
++
++.TP
++\fBQ\fR  0.0..5.0
++Reduce the quantization for highly detailed blocks as needed. 0.0 means always use the same quantization for the entire frame.
++.TP
++\fBX\fR  0.0..2500.0
++Luma (brightness) variance below which to use \-Q.
++
++.SS Other Options
++.TP
++\fB\-c\fR, \fB\-config\fR \fI/path/to/config.file\fR
++Specify a path to a config file; profile looks for a default configuration file in $HOME/.vidprofile/profile.conf and reads it before starting. See FILES (or the README) for an example configuration file. When using a configuration file, all command line options placed _after_ the configuration file will override the options in the configuration file (except for \fB\-t\fR, in which case all tests are included and none are overridden). If the default configuration file exists and another file is specified with \-c, the specified file takes precedence over the default file. The order of importance, from least to most important, is: default configuration file, specified configuration file, right\-most command line options.
++
++.TP
++\fB\-k\fR, \fB\-keepvids\fR
++Keep encoded videos. After each option trial is finished, profile deletes the encoded video by default. Use this option if you want to keep every trial encoding. Videos are left in the present working directory, so this could take up a lot of space!
++
++.TP
++\fB\-nf\fR, \fB\-encframe\fR \fINUMBER\fR
++Encode \fINUMBER\fR frames. profile encodes the _entire_ source video for every trial by default. If you don't want to encode the whole file, you may specify an integer number of frames (\fINUMBER\fR) to encode with this option. As a rule of thumb, 1 second of NTSC video is 30 frames and one second of PAL video is 25 frames.
++
++.TP
++\fB\-p\fR, \fB\-psnr\fR \fINUMBER\fR|\fBall\fR
++Find the Peak\-Signal\-to\-Noise Ratio for \fINUMBER\fR frames. profile does not find the Peak\-Signal\-to\-Noise Ratio by default. If you want to find the PSNR between the source video and each encoded trial, use this option. \fINUMBER\fR is the number of frames to average for the PSNR (use \fBall\fR to compare the entire videos). If \fB\-nf\fR is given, the number of PSNR frames must be less than or equal to the number of encoded frames.
++
++.TP
++\fB\-s\fR, \fB\-snapshot\fR \fINUMBER\fR
++Take a snapshot of frame \fINUMBER\fR. profile can take one frame from the source video and each encoded trial. Use this option to enable this feature and specify which frame to capture. Like \-p, if \fB\-nf\fR is specified, the snapshot frame number must be less than or equal to the number of encoded frames. Snapshots are left in the present working directory.
++
++.TP
++\fB\-h\fR, \fB\-help\fR
++Display a usage guide and exit.
++
++.TP
++\fB\-v\fR, \fB\-version\fR
++Print the version number and exit.
++
++.SS EXAMPLES
++.TP
++profile \-t &quot;\-H&quot; \-t &quot;\-4 1 4 1 \-2 1 4 1&quot; \-nf 450 \-f /home/foo/bar.avi
++Test the flag \-H, and the options \-4 and \-2 using the first 450 frames from /home/foo/bar.avi. First, \-H will be tested. Next, \-2 will be tested for 1, 2, 3, and 4 while \-4 is at 1; then, \-4 will be set to 2 and \-2 will be tested from 1 to 4 again; and so on until \-4 reaches 4. Provided the default config file isn't present, or sets the other options, logs are sent to the default locations, snapshots are not taken, encoded videos are not kept, and the PSNR is not calculated.
++
++.TP
++profile \-c $HOME/.vidprofile/custom.conf \-l $HOME/profile\-data.csv
++Test all the flags present in $HOME/.vidprofile/custom.conf, and use other settings specified (like snapshots or PSNR) in that file. Specifying \-l after \-c ensures the data log will be written to $HOME/profile\-data.csv (even if \-c lists a custom data log location \- options to the right of \-c override any options in the config file).
++
++.SS FILES
++.TP
++$HOME/.vidprofile/profile.csv
++The data output file. See \fB\-l\fR for more description.
++
++.TP
++$HOME/.vidprofile/profile.conf
++The default configuration file. See \fB\-c\fR for more description on its use.
++
++.P
++Sample configuration file:
++
++.nf
++  profile
++  # Config file for profile. DO NOT COMMENT IN-LINE
++  #
++  # Options given before -c/-config on the command line will 
++  # be overridden by this config file.
++  
++  ########
++  # Logs #
++  ########
++  
++  # logfile (default: $HOME/.vidprofile/profile.csv)
++  # Where should the main data be written?
++  #-logfile $HOME/.vidprofile/profile.csv
++  
++  # errlog (default: /dev/null)
++  # Where should errors be sent?
++  #-errlog $HOME/.vidprofile/profile.err
++  
++  # enclog (default: /dev/null)
++  # Where should mplayer's and mpeg2enc's output be sent?
++  #-enclog /dev/null
++  
++  # psnrlog (default: $HOME/.vidprofile/psnr.csv)
++  # Where should the frame-by-frame PSNR report be sent?
++  #-psnrlog $HOME/.vidprofile/psnr.csv
++  
++  ################
++  # Tests to run #
++  ################
++  
++  # Which options of mpeg2enc should be tested?
++  # See 'man mpeg2enc' for further option explanations.
++  # Uncomment a test to run that test.
++  
++  # Flags
++  #-test &quot;-p&quot;
++  #-test &quot;-H&quot;
++  #-test &quot;-s&quot;
++  #-test &quot;-c&quot;
++  
++  # Single ranges
++  # The syntax is:
++  # [option] [min] [max] [step]
++  # [step] may be a decimal as long as [max] has the same 
++  #   number of decimal points.
++  #     eg &quot;-N 0 2.0 0.4&quot; is OK, while
++  #        &quot;-N 0 2   0.4&quot; is not.
++  #-test &quot;-R 0 2 1&quot;
++  #-test &quot;-E -40 40 5&quot;
++  #-test &quot;-r 8 32 8&quot;
++  #-test &quot;-D 9 10 1&quot;
++  #-test &quot;-N 0.0 2.0 0.4&quot;
++  
++  # Double ranges
++  # The syntax is:
++  # [option1] [min1] [max1] [step1] [min2] [max2] [step2]
++  # [step1|2] may be a decimal as long as [max1|2] has the 
++  #   same number of decimal points.
++  # The second option range is tested fully for each case 
++  #   of the first option.
++  #     eg &quot;-b 800 9800 500 -q 1 18 1&quot; means run 
++  #     -q 1 18 1 for -b 800, then increment -b, repeat
++  #-test &quot;-b 800 9800 500 -q 1 18 1&quot;
++  #-test &quot;-4 1 4 1 -2 1 4 1&quot;
++  #-test &quot;-Q 0 5 1 -X 0 1000 100&quot;
++  #-test &quot;-G 2 24 2 -g 2 24 2&quot;
++  
++  #################
++  # Other options #
++  #################
++  
++  # encframes (default: the whole movie)
++  # How many frames should mplayer send to mpeg2enc?
++  # To encode the entire input file, comment this line, 
++  #   or set the the number of frames to more than the 
++  #   frames in the input file.
++  # 450 frames play just longer than 15sec (NTSC) or 18sec (PAL)
++  #-encframe 450
++  
++  # keepvids
++  # Keep the videos mpeg2enc creates?
++  # The script leaves the movies in the same directory from 
++  #   which it was called.
++  #-keepvids
++  
++  # snapshot
++  # Take a frame from each test?
++  # If so, which one? (must be less than either the number of 
++  #   frames mplayer sends to mpeg2enc, above, or the amount of 
++  #   frames in the entire input file) The script leaves the snap 
++  #   shots in the same directory from which it was called.
++  #-snapshot 50
++  
++  # psnr
++  # Find the Peak Signal to Noise Ratio?
++  # If so, how many frames should be compared? (must be less 
++  #   than either the number of frames mplayer sends to mpeg2enc, 
++  #   above, or the amount of frames in the entire input file)
++  # Comment for every frame of the encoded videos. 
++  # NOTE: each frame is about 1MB, please have sufficient space in the
++  #   present working directory.
++  #-psnr 60
++.fi
++
++
++.SS SEE ALSO
++.P
++\fBpsnrcore\fR(1), \fBvidpsnr\fR(1)
++
++.SS BUGS
++.P
++It is possible to pass options to mpeg2enc that aren't options. When checking for a test's validity, only the number of arguments in a test are counted. Thus, if a test is specified that matches a correct length (1, 4, or 8 fields), it will be passed to mpeg2enc, which may break things. eg \-Z is not an option, but calling \-t &quot;\-Z 1 10 2&quot; would pass the input checks and break profile.
++
++.P
++On a similar note: Whether or not an option takes a numerical argument is not checked: eg \-t &quot;\-H 0 5 1&quot; would break profile (\-H is a flag!). Also, whether or not a test has numerical values isn't checked: eg \-t &quot;\-E foo bar stop&quot; would break profile.
++
++.P
++If an option can take a decimal argument, both MAX and STEP must have the same number of decimal points: eg \-t &quot;\-N 0 2 0.1&quot; would break profile (needs to be \-t &quot;\-N 0.0 2\fB.0\fR 0.1&quot;).
++
++.SS AUTHOR
++.P
++Streamlined and made robust by Joe Friedrichsen. Original idea and rough\-cut by Eric Pierce.
++
++.SS CONTACT
++.P
++Send bugs to vidprofile\<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">-users at lists.berlios.de.</A> Please see the vidprofile homepage (<A HREF="http://vidprofile.berlios.de">http://vidprofile.berlios.de</A>) for further information.
++
++
++.\&quot; man code generated by txt2tags 2.3 (<A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>)
++.\&quot; cmdline: txt2tags -t man --infile=src/profile.t2t --outfile=profile.man
++
+
+Added: trunk/doc/psnrcore.man
+===================================================================
+--- trunk/doc/psnrcore.man	2005-12-05 13:37:21 UTC (rev 2)
++++ trunk/doc/psnrcore.man	2005-12-05 13:42:06 UTC (rev 3)
+@@ -0,0 +1,80 @@
++.TH &quot;psnrcore&quot; 1 &quot;&quot; &quot;&quot;
++
++
++.SS NAME
++.P
++psnrcore \-\- Calculate the Peak\-Signal\-to\-Noise Ratio (PSNR) between the frames of two videos.
++
++.SS SYNOPSIS
++.P
++\fBpsnrcore\fR [ \fIOPTIONS\fR ] \fB\-o\fR \fI/path/to/original/video/frames\fR
++                     \fB\-c\fR \fI/path/to/comparison/video/frames\fR
++                     \fB\-l\fR \fI/path/to/psnr/log.csv\fR
++
++.SS DESCRIPTION
++.P
++psnrcore is a backend that calculates the PSNR between the frames from two video files. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc; mplayer can do this with the \fB\-vo pnm\fR option). The first video file is generally the original video, and the second is a modified version of the original. Often, the second video is encoded in a different codec (or the same codec, but with different options), or uses filters to improve or change the video. The aim of this script is to give concrete numbers to often subjective video quality comparisons.
++
++.P
++psnrcore sequentially compares frames from both videos, calculating the PSNR for each frame, and finally averages the overall PSNR for both videos. Frame\-by\-frame data are written to a comma separated values (.csv) file, while the final PSNR is returned to standard out.
++
++.SS FEATURES
++.RS
++.IP \(bu 3
++Calculates the PSNR for each frame and saves the data in a comma separated values (.csv) file.
++.IP \(bu 3
++Returns the average PSNR to standard out.
++.RE
++
++.SS OPTIONS
++.SS Required Options
++.TP
++\fB\-o\fR, \fB\-original\fR \fI/path/to/original/video/frames\fR
++Specify the path to the directory of frames from the original video file. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc).
++
++.TP
++\fB\-c\fR, \fB\-compare\fR \fI/path/to/comparison/video/frames\fR
++Specify the path to the directory of frames from the comparison video file. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc).
++
++.TP
++\fB\-l\fR, \fB\-log\fR \fI/path/to/psnr/log.csv\fR
++Specify the path (including the name) to a file to which the PSNR for each frame will be written. If the log doesn't exist, it will be created.
++
++Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.
++
++In cases where the images do not differ, the PSNR cannot be found (because the denominator is zero). Since the images are exactly the same, there is no 'noise', and the PSNR is infinite instead.
++
++.SS Other Options
++.TP
++\fB\-h\fR, \fB\-help\fR
++Display a usage guide and exit.
++
++.TP
++\fB\-v\fR, \fB\-version\fR
++Print the version number and exit.
++
++.SS EXAMPLES
++.TP
++psnrcore \-o ./orig\-frames \-c ./comp\-frames \-l $HOME/psnr\-log.csv
++Use the frames in ./orig\-frames as the basis for the PSNR between those frames and ./comp\-frames. Store the frame\-by\-frame data in $HOME/psnr\-log.csv
++
++.SS SEE ALSO
++.P
++\fBvidpsnr\fR(1), \fBprofile\fR(1)
++
++.SS BUGS
++.P
++NONE (known)
++
++.SS AUTHOR
++.P
++Streamlined and made robust by Joe Friedrichsen. Original idea and rough\-cut by Matthias Wieser.
++
++.SS CONTACT
++.P
++Send bugs to vidprofile\<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">-users at lists.berlios.de.</A> Please see the vidprofile homepage (<A HREF="http://vidprofile.berlios.de">http://vidprofile.berlios.de</A>) for further information.
++
++
++.\&quot; man code generated by txt2tags 2.3 (<A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>)
++.\&quot; cmdline: txt2tags -t man --infile=src/psnrcore.t2t --outfile=psnrcore.man
++
+
+Added: trunk/doc/vidpsnr.man
+===================================================================
+--- trunk/doc/vidpsnr.man	2005-12-05 13:37:21 UTC (rev 2)
++++ trunk/doc/vidpsnr.man	2005-12-05 13:42:06 UTC (rev 3)
+@@ -0,0 +1,102 @@
++.TH &quot;vidpsnr&quot; 1 &quot;&quot; &quot;&quot;
++
++
++.SS NAME
++.P
++vidpsnr \-\- Find the Peak\-Signal\-to\-Noise Ratio between two videos.
++
++.SS SYNOPSIS
++.P
++\fBvidpsnr\fR [ \fIOPTIONS\fR ] \fB\-o\fR \fI/path/to/original/video.avi\fR
++                    \fB\-c\fR \fI/path/to/comparison/video.avi\fR
++                    \fB\-l\fR \fI/path/to/psnr/log.csv\fR
++
++.SS DESCRIPTION
++.P
++vidpsnr, a frontend to psnrcore, calculates the Peak\-Signal\-to\-Noise Ratio between two video files. The first video file is generally the original video, and the second is a modified version of the original. Often, the second video is encoded in a different codec (or the same codec, but with different options), or uses filters to improve or change the video. The aim of this script is to give concrete numbers to often subjective video quality comparisons.
++
++.P
++vidpsnr takes the two input videos and generates separate directories of frames using mplayer. The number of frames generated is controllable, as well as the individual mplayer options used to create the frames (to accommodate filter testing and more). After the frames have been made, vidpsnr calls psnrcore, which sequentially compares frames from both videos, calculating the PSNR for each frame, and finally averages the overall PSNR for both videos. Frame\-by\-frame data are written to a text file, while the final PSNR is returned to standard out.
++
++.SS FEATURES
++.RS
++.IP \(bu 3
++Calculates the PSNR between entire videos (or the first N frames).
++.IP \(bu 3
++Calculates the PSNR for each frame and saves the data in a comma separated values (.csv) file.
++.IP \(bu 3
++Passes individual mplayer options for both videos, allowing for filter testing.
++.RE
++
++.SS OPTIONS
++.SS Required Options
++.TP
++\fB\-o\fR, \fB\-original\fR \fI/path/to/original/video.avi\fR
++Specify the path to the original video file.
++
++.TP
++\fB\-c\fR, \fB\-compare\fR \fI/path/to/comparison/video.avi\fR
++Specify the path to the comparison video file.  Note: the same video may be used to test filters by using the \fB*opts\fR parameters (see EXAMPLES).
++
++.TP
++\fB\-l\fR, \fB\-log\fR \fI/path/to/psnr/log.csv\fR
++Specify the path to the data log for the frame\-by\-frame PSNR data. If the log doesn't exist, it will be created.
++
++Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.
++
++In cases where the images do not differ, the PSNR cannot be found (because the denominator is zero). Since the images are exactly the same, there is no 'noise', and the PSNR is infinite instead.
++
++.SS Other Options
++.TP
++\fB\-f\fR, \fB\-frame\fR \fIFRAME\fR
++By default, vidpsnr will find the PSNR between both entire videos. Give this option to limit PSNR calculation to the first \fIFRAME\fR frames.
++
++.TP
++\fB\-oo\fR, \fB\-origopts\fR \fB&quot;\fR\fIMPLAYER OPTIONS\fR\fB&quot;\fR
++Specify additional options to be passed to mplayer when making frames for the original video. \fB&quot;Surround in double quotes.&quot;\fR
++
++.TP
++\fB\-co\fR, \fB\-compopts\fR \fB&quot;\fR\fIMPLAYER OPTIONS\fR\fB&quot;\fR
++Specify additional options to be passed to mplayer when making frames for the comparison video. \fB&quot;Use double quotes!&quot;\fR
++
++.TP
++\fB\-h\fR, \fB\-help\fR
++Display a usage guide and exit.
++
++.TP
++\fB\-v\fR,  \fB\-version\fR
++Print the version number and exit.
++
++.SS EXAMPLES
++.TP
++vidpsnr \-o ./original.avi \-c ./comparison.avi \-l $HOME/psnr\-log.csv
++Find the PSNR between both entire videos, and store the frame\-by\-frame data in $HOME/psnr\-log.csv
++
++.TP
++vidpsnr \-f 60 \-o ./original.avi \-c ./comparison.avi \-l $HOME/psnr\-log.csv
++Find the PSNR between the first 60 frames of both videos, and store the frame\-by\-frame data in $HOME/psnr\-log.csv
++
++.TP
++vidpsnr \-co &quot;\-vf pp=hb&quot; \-o ./foo.avi \-c ./foo.avi \-l psnr\-log.csv
++Evaluate the quality of mplayer's horizontal deblocking filter, and store the frame\-by\-frame data in psnr\-log.csv (in the present working directory)
++
++.SS SEE ALSO
++.P
++\fBpsnrcore\fR(1), \fBprofile\fR(1)
++
++.SS BUGS
++.P
++NONE (known)
++
++.SS AUTHOR
++.P
++Streamlined and made robust by Joe Friedrichsen. Original idea and rough\-cut by Matthias Wieser.
++
++.SS CONTACT
++.P
++Send bugs to vidprofile\<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">-users at lists.berlios.de.</A> Please see the vidprofile homepage (<A HREF="http://vidprofile.berlios.de">http://vidprofile.berlios.de</A>) for further information.
++
++
++.\&quot; man code generated by txt2tags 2.3 (<A HREF="http://txt2tags.sf.net">http://txt2tags.sf.net</A>)
++.\&quot; cmdline: txt2tags -t man --infile=src/vidpsnr.t2t --outfile=vidpsnr.man
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000001.html">[vidprofile-svn] r2 - trunk/doc/src
+</A></li>
+	<LI>Next message: <A HREF="000003.html">[vidprofile-svn] r6 - trunk/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

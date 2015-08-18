@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r9 - trunk/doc/src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r9%20-%20trunk/doc/src&In-Reply-To=%3C200512060831.jB68VNNl006891%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000005.html">
+   <LINK REL="Next"  HREF="000007.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r9 - trunk/doc/src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r9%20-%20trunk/doc/src&In-Reply-To=%3C200512060831.jB68VNNl006891%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r9 - trunk/doc/src">friedrij at berlios.de
+       </A><BR>
+    <I>Tue Dec  6 09:31:23 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000005.html">[vidprofile-svn] r8 - trunk/doc/src
+</A></li>
+        <LI>Next message: <A HREF="000007.html">[vidprofile-svn] r10 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#6">[ date ]</a>
+              <a href="thread.html#6">[ thread ]</a>
+              <a href="subject.html#6">[ subject ]</a>
+              <a href="author.html#6">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2005-12-06 09:31:14 +0100 (Tue, 06 Dec 2005)
+New Revision: 9
+
+Modified:
+   trunk/doc/src/setup.t2t
+Log:
+reorganized installation procedure - get source, configure, make, install
+
+Modified: trunk/doc/src/setup.t2t
+===================================================================
+--- trunk/doc/src/setup.t2t	2005-12-06 08:29:57 UTC (rev 8)
++++ trunk/doc/src/setup.t2t	2005-12-06 08:31:14 UTC (rev 9)
+@@ -37,23 +37,45 @@
+   
+ == Installation ==
+ 
+-=== Source tarball ===[source]
++At the moment, vidprofile is &quot;under the radar&quot; - it's very new, and it caters to an extremely small niche community. No package repositories have it (no .deb, no .rpm, no gentoo, no nothing). So, you'll have to get the source from berliOS (vidprofile's host).
++
++=== Get the source ===
++
++There are two ways you can get the source: from a tarball built by autotools or from Subversion.
++
++==== Source tarball ====[source]
+ - [PACKAGE.tar.gz <A HREF="http://prdownloads.sourceforge.net/tovid/PACKAGE.tar.gz?download">http://prdownloads.sourceforge.net/tovid/PACKAGE.tar.gz?download</A>] contains the command-line scripts.
+ 
+ 
+ Download the command-line package and save it on your computer. We'll assume it's saved in ~/Downloads.
+ 
+-Next, open a terminal window (such as XTerm, RXVT, or Konsole) and extract the tarball by typing the following commands:
++Next, open a terminal window (such as XTerm, RXVT, or Konsole) and extract the tarball. The installation files will go into a subdirectory called PACKAGE within the current directory with these commands:
+ 
+ ```
+ $ cd ~/Downloads
+ $ tar -xzvf PACKAGE.tar.gz
++$ cd PACKAGE
+ ```
+ 
+-The installation files will go into a subdirectory called PACKAGE within the current directory. Next, do the following:
++==== SVN source ====[cvs]
+ 
++You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online <A HREF="http://svn.berlios.de/wsvn/vidprofile">http://svn.berlios.de/wsvn/vidprofile</A>]. To get this version, you need to have [Subversion <A HREF="http://subversion.tigris.org/">http://subversion.tigris.org/</A>] installed and autotools ([automake <A HREF="http://www.gnu.org/software/automake/">http://www.gnu.org/software/automake/</A>] and [autoconf <A HREF="http://www.gnu.org/software/autoconf/">http://www.gnu.org/software/autoconf/</A>]) to prepare the raw source for building.
++
++Using SVN is a little different; instead of just downloading vidprofile, you'll be &quot;checking out&quot; a copy of it. Using the same example directory as above:
++
++``` 
++$ cd ~/Downloads
++$ svn checkout <A HREF="svn://svn.berlios.de/vidprofile/trunk">svn://svn.berlios.de/vidprofile/trunk</A>
++&lt;lots of output&gt;
++$ cd trunk
++$ ./bootstrap
+ ```
+-$ cd ~/Downloads/PACKAGE
++
++=== Configure, Compile, and Install ===
++
++Now that you have the source, configure, compile, and install the package:
++
++```
+ $ ./configure
+ $ make
+ $ su -c &quot;make install&quot;
+@@ -80,25 +102,8 @@
+ config.status: creating src/lib-vidprofile.sh
+ ```
+ 
+-=== SVN builds ===[cvs]
++== Uninstalling ==
+ 
+-You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online <A HREF="http://svn.berlios.de/wsvn/vidprofile">http://svn.berlios.de/wsvn/vidprofile</A>]. To get this version, you need to have [SVN <A HREF="http://subversion.tigris.org/">http://subversion.tigris.org/</A>] installed.
+-
+-Using SVN is a little different; instead of just downloading vidprofile, you'll be &quot;checking out&quot; a copy of it. Using the same example directory as above:
+-
+-``` 
+-$ cd ~/Downloads
+-$ svn checkout <A HREF="svn://svn.berlios.de/vidprofile/trunk">svn://svn.berlios.de/vidprofile/trunk</A>
+-&lt;lots of output&gt;
+-$ cd trunk
+-$ ./bootstrap
+-$ ./configure
+-$ make
+-$ su -c &quot;make install&quot; 
+-```
+-
+-=== Uninstalling ===
+-
+ If you decide you don't want vidprofile installed anymore, run **``su -c &quot;make uninstall&quot;``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
+ 
+ %!include(html): incl-footer.t2t
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000005.html">[vidprofile-svn] r8 - trunk/doc/src
+</A></li>
+	<LI>Next message: <A HREF="000007.html">[vidprofile-svn] r10 - trunk/doc/src
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#6">[ date ]</a>
+              <a href="thread.html#6">[ thread ]</a>
+              <a href="subject.html#6">[ subject ]</a>
+              <a href="author.html#6">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>

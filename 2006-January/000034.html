@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [vidprofile-svn] r38 - in trunk: . src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/vidprofile-svn/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r38%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200601211041.k0LAfSeD024836%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000033.html">
+   <LINK REL="Next"  HREF="000035.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[vidprofile-svn] r38 - in trunk: . src</H1>
+    <B>friedrij at BerliOS</B> 
+    <A HREF="mailto:vidprofile-svn%40lists.berlios.de?Subject=Re%3A%20%5Bvidprofile-svn%5D%20r38%20-%20in%20trunk%3A%20.%20src&In-Reply-To=%3C200601211041.k0LAfSeD024836%40sheep.berlios.de%3E"
+       TITLE="[vidprofile-svn] r38 - in trunk: . src">friedrij at berlios.de
+       </A><BR>
+    <I>Sat Jan 21 11:41:28 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000033.html">[vidprofile-svn] r37 - in trunk: . src
+</A></li>
+        <LI>Next message: <A HREF="000035.html">[vidprofile-svn] r39 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: friedrij
+Date: 2006-01-21 11:41:28 +0100 (Sat, 21 Jan 2006)
+New Revision: 38
+
+Modified:
+   trunk/ChangeLog
+   trunk/configure.ac
+   trunk/src/lib-vidprofile.sh.in
+Log:
+smarter and more general autoconfig
+
+Modified: trunk/ChangeLog
+===================================================================
+--- trunk/ChangeLog	2006-01-21 08:54:56 UTC (rev 37)
++++ trunk/ChangeLog	2006-01-21 10:41:28 UTC (rev 38)
+@@ -1,3 +1,13 @@
++2006-01-21 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
++ * src/Makefile.am:
++     Use Static Pattern Rules to simplify and generalze
++          shell script building.
++
++  * configure.ac:
++     Cleaned up dependency finding: more generalized if additional
++          dependencies are added later. More helpful final summary
++          written.
++
+ 2005-12-06 Joe Friedrichsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">friedrij at users.berlios.de</A>&gt;
+  vidprofile-0.80 released on berlios.de.
+ 
+
+Modified: trunk/configure.ac
+===================================================================
+--- trunk/configure.ac	2006-01-21 08:54:56 UTC (rev 37)
++++ trunk/configure.ac	2006-01-21 10:41:28 UTC (rev 38)
+@@ -27,6 +27,10 @@
+ # ******************************************************************************
+ # ******************************************************************************
+ 
++# The first arugment sets the package name, the second sets the package version.
++# eg [vidprofile], [0.80] would yield a vidprofile-0.80.tar.gz after &quot;$ make dist&quot;
++#                         the version number is also substituted into 
++#                         lib-vidprofile.sh.in
+ AC_INIT([vidprofile], [svn])
+ AC_CONFIG_SRCDIR([src/profile.sh])
+ 
+@@ -57,37 +61,108 @@
+ # ******************************************************************************
+ 
+ AC_MSG_NOTICE([Checking for required dependencies...])
+-AC_PATH_PROG(GREP, [grep], [NOT FOUND])
+-AC_PATH_PROG(MPLAYER, [mplayer], [NOT FOUND])
+-AC_PATH_PROG(MPEG2ENC, [mpeg2enc], [NOT FOUND])
+-AC_PATH_PROG(BC, [bc], [NOT FOUND])
++AC_CHECK_PROG(GREP, [grep], [ok], [NOT FOUND])
++AC_CHECK_PROG(MPLAYER, [mplayer], [ok], [NOT FOUND])
++AC_CHECK_PROG(MPEG2ENC, [mpeg2enc], [ok], [NOT FOUND])
++AC_CHECK_PROG(BC, [bc], [ok], [NOT FOUND])
+ 
+-if test &quot;$GREP&quot; = &quot;NOT FOUND&quot; || \
+-   test &quot;$MPLAYER&quot; =  &quot;NOT FOUND&quot; || \
+-   test &quot;$MPEG2ENC&quot; =  &quot;NOT FOUND&quot; || \
+-   test &quot;$BC&quot; = &quot;NOT FOUND&quot;; then
+-        AC_MSG_ERROR([ Could not find these REQUIRED dependencies:
++# ------------------------------------------------------------------------------
++# Complain about missing required dependencies. If some are missing, list all
++# missing ones before failing and exiting.
+ 
+-    grep:               $GREP
+-    mplayer:            $MPLAYER
+-    mpeg2enc:           $MPEG2ENC
+-    bc:                 $BC
++# Sneaky make-do array. 
++REQ_DEP_LIST=&quot;grep=$GREP:mplayer=$MPLAYER:mpeg2enc=$MPEG2ENC:bc=$BC&quot;
++
++# We can use gawk with confidence because the above
++# initiation macros look for it and will exit if gawk isn't found.
++FAIL=false
++i=1
++while test $i -le `echo &quot;$REQ_DEP_LIST&quot; | gawk -F ':' '{ print NF }'`; do
++   DEP=`echo $REQ_DEP_LIST | gawk -F ':' &quot;{ print $&quot;$i&quot; }&quot;`
++   NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
++   FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
++   if test &quot;x$FOUND&quot; != &quot;xok&quot;; then
++     AC_MSG_WARN([Cannot find REQUIRED dependency: $NAME])
++     FAIL=:
++   fi
++   i=`expr $i + 1`
++done
++
++if $FAIL; then
++ AC_MSG_ERROR([
++
++ Could not find the above REQUIRED dependencies.
++ Please install the missing dependencies and ./configure again.
++ See vidprofile.berlios.de for links.
+ ])
+ fi
+ 
++
+ # ******************************************************************************
+ # Optional Dependencies 
+ # ******************************************************************************
+ 
+ AC_MSG_NOTICE([Checking for optional dependencies...])
+-AC_CHECK_PROG(HAVE_PNMPSNR, [pnmpsnr], [pnmpsnr], [no-pnmpsnr])
+ 
+-if test &quot;$PNMPSNR&quot; = &quot;no-pnmpsnr&quot;; then
+-        AC_MSG_WARN([Could not find these OPTIONAL dependencies:
+-    pnmpsnr:            $HAVE_PNMPSNR
+-])
++# ------------------------------------------------------------------------------
++# Disabled messages given to user in the FINAL SUMMARY when a dependency cannot
++# be found.
++pnmpsnr_msg=&quot;(cannot measure PSNR)&quot;
++
++# ------------------------------------------------------------------------------
++# Check for Peak Signal to Noise Ratio dependencies
++AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [NOT FOUND])
++
++if test &quot;x$PNMPSNR&quot; = &quot;xok&quot;; then
++   HAVE_PSNR=&quot;pnmpsnr&quot;
++else
++   HAVE_PSNR=&quot;&quot;
++   AC_MSG_WARN([Cannot find pnmpsnr! You cannot measure PSNR.])
+ fi
+ 
++# ------------------------------------------------------------------------------
++# Clear the disabled messages if the corresponding dependencies were found.
++
++# Sneaky make-do array. 
++OPT_DEP_LIST=&quot;pnmpsnr=$PNMPSNR&quot;
++
++i=1
++while test $i -le `echo &quot;$OPT_DEP_LIST&quot; | gawk -F ':' '{ print NF }'`; do
++   DEP=`echo $OPT_DEP_LIST | gawk -F ':' &quot;{ print $&quot;$i&quot; }&quot;`
++   NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
++   FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
++   if test &quot;x$FOUND&quot; = &quot;xok&quot;; then
++     unset ${NAME}_msg
++   fi
++   i=`expr $i + 1`
++done
++
++if test &quot;x$HAVE_PSNR&quot; = &quot;xpnmpsnr&quot;
++then
++   OPT_DEPENDENCIES=&quot;ALL FOUND&quot;
++else
++   OPT_DEPENDENCIES=&quot;SOME MISSING&quot;
++fi
++
++# ******************************************************************************
++# Build Options List, and make .in file substitutions
++# ******************************************************************************
++
++BUILD_OPTS=&quot;&quot;
++for OPT in $HAVE_PSNR
++do
++  if test -z $OPT; then :
++  else
++     BUILD_OPTS=&quot; $OPT$BUILD_OPTS&quot;
++  fi
++done
++BUILD_OPTS=&quot;core$BUILD_OPTS&quot;
++
++# AC_SUBST(VARIABLE, [VALUE]) 
++# Make VARIABLE .in file substitutable. @VARIABLE@ found inside .in files will 
++# be replaced with VALUE
++AC_SUBST(BUILD_OPTS)
++
+ AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
+ AC_OUTPUT
+ 
+@@ -103,12 +178,8 @@
+ 
+ FINAL SUMMARY
+ 
+-  Required dependencies
+-    grep:               $GREP
+-    mplayer:            $MPLAYER
+-    mpeg2enc:           $MPEG2ENC
+-    bc:                 $BC
++  Required dependencies: ALL FOUND
+ 
+-  Optional dependencies
+-    pnmpsnr:            $HAVE_PNMPSNR
++  Optional dependencies: $OPT_DEPENDENCIES
++    pnmpsnr:       $PNMPSNR  $pnmpsnr_msg
+ ])
+\ No newline at end of file
+
+Modified: trunk/src/lib-vidprofile.sh.in
+===================================================================
+--- trunk/src/lib-vidprofile.sh.in	2006-01-21 08:54:56 UTC (rev 37)
++++ trunk/src/lib-vidprofile.sh.in	2006-01-21 10:41:28 UTC (rev 38)
+@@ -43,7 +43,7 @@
+ # ******************************************************************************
+  
+ VIDPROFILE_VERSION=&quot;@VERSION@&quot;
+-BUILD_OPTS=&quot;core @HAVE_PNMPSNR@&quot;
++BUILD_OPTS=&quot;@BUILD_OPTS@&quot;
+ 
+ VIDPROFILE_HOME=&quot;$HOME/.vidprofile&quot;
+ 
+@@ -89,7 +89,8 @@
+ # ******************************************************************************
+ check_optional_dependency()
+ {
+-  if echo &quot;$BUILD_OPTS&quot; | grep &quot;no-$1&quot; &gt;&gt; /dev/null 2&gt;&amp;1; then
++  if echo &quot;$BUILD_OPTS&quot; | grep &quot;$1&quot; &gt;&gt; /dev/null 2&gt;&amp;1; then :
++  else
+      exit_with_error &quot;Not suported! \&quot;$2\&quot; requires \&quot;$1\&quot;. Install $1 and recompile.&quot;
+   fi
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000033.html">[vidprofile-svn] r37 - in trunk: . src
+</A></li>
+	<LI>Next message: <A HREF="000035.html">[vidprofile-svn] r39 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/vidprofile-svn">More information about the vidprofile-svn
+mailing list</a><br>
+</body></html>
